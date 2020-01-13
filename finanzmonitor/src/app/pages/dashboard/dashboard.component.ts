@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { d3 } from 'angular-nvd3';
+import { ChartOptions, ChartType, ChartDataSets } from 'chart.js';
+import { Label } from 'ng2-charts';
 
 @Component({
   selector: 'app-dashboard',
@@ -10,86 +11,17 @@ export class DashboardComponent implements OnInit {
 
   constructor() { }
 
-  options;
-  data;
-
-  ngOnInit() {
-    this.options = {
-      chart: {
-        type: 'multiBarChart',
-        height: 450,
-        margin: {
-          top: 20,
-          right: 20,
-          bottom: 45,
-          left: 45
-        },
-        clipEdge: true,
-        duration: 500,
-        stacked: true,
-        xAxis: {
-          axisLabel: 'Time (ms)',
-          showMaxMin: false,
-          tickFormat: function (d) {
-            return d3.format(',f')(d);
-          }
-        },
-        yAxis: {
-          axisLabel: 'Y Axis',
-          axisLabelDistance: -20,
-          tickFormat: function (d) {
-            return d3.format(',.1f')(d);
-          }
-        }
-      }
-    };
-
-    this.data = this.generateData();
+  ngOnInit(){
   }
+  barChartOptions: ChartOptions = {
+    responsive: true,
+  };
+  barChartLabels: Label[] = ['Apple', 'Banana', 'Kiwifruit', 'Blueberry', 'Orange', 'Grapes'];
+  barChartType: ChartType = 'bar';
+  barChartLegend = true;
+  barChartPlugins = [];
 
-
-  /* Random Data Generator (took from nvd3.org) */
-  generateData() {
-    return this.stream_layers(3, 50 + Math.random() * 50, .1).map(function (data, i) {
-      return {
-        key: 'Stream' + i,
-        values: data
-      };
-    });
-  }
-
-  /* Inspired by Lee Byron's test data generator. */
-  stream_layers(n, m, o) {
-    if (arguments.length < 3) o = 0;
-    function bump(a) {
-      var x = 1 / (.1 + Math.random()),
-        y = 2 * Math.random() - .5,
-        z = 10 / (.1 + Math.random());
-      for (var i = 0; i < m; i++) {
-        var w = (i / m - y) * z;
-        a[i] += x * Math.exp(-w * w);
-      }
-    }
-    return d3.range(n).map(function () {
-      var a = [], i;
-      for (i = 0; i < m; i++) a[i] = o + o * Math.random();
-      for (i = 0; i < 5; i++) bump(a);
-      return a.map(this.stream_index);
-    });
-  }
-
-  /* Another layer generator using gamma distributions. */
-  stream_waves(n, m) {
-    return d3.range(n).map(function (i) {
-      return d3.range(m).map(function (j) {
-        var x = 20 * j / m - i / 3;
-        return 2 * x * Math.exp(-.5 * x);
-      }).map(this.stream_index);
-    });
-  }
-
-  stream_index(d, i) {
-    return { x: i, y: Math.max(0, d) };
-  }
-
+  barChartData: ChartDataSets[] = [
+    { data: [45, 37, 60, 70, 46, 33], label: 'Best Fruits' }
+  ];
 }
