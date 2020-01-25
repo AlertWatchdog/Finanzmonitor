@@ -15,11 +15,18 @@ import { MatListModule } from '@angular/material/list';
 import { MatCardModule } from '@angular/material/card';
 import { ChartsModule } from 'ng2-charts';
 
+import { AngularFireModule } from '@angular/fire';
+import { environment } from '../environments/environment';
+import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { AngularFireAuthModule } from '@angular/fire/auth';
+import { AuthComponent } from './auth/auth.component';
+
 @NgModule({
   declarations: [
     AppComponent,
     AuthenticatedComponent,
     DashboardComponent,
+    AuthComponent,
   ],
   imports: [
     BrowserModule,
@@ -32,7 +39,10 @@ import { ChartsModule } from 'ng2-charts';
     MatIconModule,
     MatListModule,
     MatCardModule,
-    ChartsModule
+    ChartsModule,
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFirestoreModule,
+    AngularFireAuthModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
