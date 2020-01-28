@@ -4,7 +4,7 @@ export class database {
     db = firestore();
 
     getUsers() {
-        this.db.collection("users").get().then((querySnapshot) => {
+        this.db.collection("User").get().then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
                 console.log(`${doc.id} => ${doc.data()}`);
             });
