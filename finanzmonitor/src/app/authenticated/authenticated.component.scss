@@ -16,3 +16,84 @@
   top: 0;
   z-index: 1;
 }
+
+.quicklink-container {
+  width: 100%;
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  /* Firefox */
+  display: -moz-box;
+  -moz-box-pack: right;
+  -moz-box-align: right;
+  /* Safari and Chrome */
+  display: -webkit-box;
+  -webkit-box-pack: right;
+  -webkit-box-align: right;
+  /* W3C */
+  display: flex;
+  box-pack: right;
+  box-align: right;
+
+}
+
+.quicklink {
+  margin-left: 1em;
+  cursor: pointer;
+}
+
+.modal-container{
+  display: none; /* Standardmäßig versteckt */
+  width: 100%;
+  height: 100%;
+  background: rgba(37, 34, 34, 0.9);
+  border: none;
+  position: fixed; /* Fixe Position */
+  z-index: 10; /* Oberste Schicht der Seite */
+  left: 0;
+  top: 0;
+  overflow: auto; /* Scrollbar, wenn nötig */
+}
+
+/* Inhaltsbereich des Dialogfensters */
+.modal-content{
+  width: 85%;
+  margin: 2%;
+  margin-top: 4%;
+  margin-left: auto; /* zentrierung */
+  margin-right: auto;
+  background: white;
+  border-radius: 3px;
+  font-family: 'Quicksand', sans-serif;
+  padding-left: 7px;
+  padding-right: 7px;
+}
+
+/* Everything in Modal Body has full width*/
+.modal-body > * {
+  width: 100%;
+}
+
+/* Schließen-Knopf */
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+#modal-headline {
+  float: left;
+}
+
+a {
+  color: white;
+  text-decoration: none;
+}

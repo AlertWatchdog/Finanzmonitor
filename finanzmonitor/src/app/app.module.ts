@@ -13,13 +13,20 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatCardModule } from '@angular/material/card';
+import {MatInputModule} from '@angular/material';
+import {MatFormFieldModule} from '@angular/material/form-field'; 
+import {MatSelectModule} from '@angular/material/select'; 
+import {ReactiveFormsModule} from '@angular/forms'
 import { ChartsModule } from 'ng2-charts';
+import {MatTooltipModule} from '@angular/material/tooltip'; 
 
 import { AngularFireModule } from '@angular/fire';
 import { environment } from '../environments/environment';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AuthComponent } from './auth/auth.component';
+import { ProfileComponent } from './pages/profile/profile.component';
+
 
 @NgModule({
   declarations: [
@@ -27,6 +34,7 @@ import { AuthComponent } from './auth/auth.component';
     AuthenticatedComponent,
     DashboardComponent,
     AuthComponent,
+    ProfileComponent,
   ],
   imports: [
     BrowserModule,
@@ -43,6 +51,11 @@ import { AuthComponent } from './auth/auth.component';
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
     AngularFireAuthModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatInputModule,
+    ReactiveFormsModule,
+    MatTooltipModule
   ],
   providers: [],
   bootstrap: [AppComponent]
