@@ -1,0 +1,25 @@
+ mat-card {
+  display: inline-block;
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+td {
+    padding-left: 2em;
+}
+
+tr {
+    height: 2em;
+}
+
+.edit{
+    font-size: 18px !important;
+    color: darkgray;
+    cursor: pointer;
+}
+
+.edit:hover{
+    font-size: 18px !important;
+    color: black !important;
+}
