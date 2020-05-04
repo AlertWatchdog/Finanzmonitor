@@ -1,49 +1,61 @@
-import {Component, NgZone, OnDestroy, OnInit} from '@angular/core';
-import * as firebase from 'firebase';
-import * as firebaseui from 'firebaseui';
-import {Router} from '@angular/router';
-import {AngularFireAuth} from '@angular/fire/auth';
+import { Component } from '@angular/core';
+import { AuthService } from '../auth/auth.service'
+import { Router, Params } from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-auth',
-  templateUrl: './auth.component.html',
-  styleUrls: ['./auth.component.scss']
+  templateUrl: 'auth.component.html',
+  styleUrls: ['auth.component.scss']
 })
-export class AuthComponent implements OnInit, OnDestroy {
+export class AuthComponent {
 
-  ui: firebaseui.auth.AuthUI;
+  loginForm: FormGroup;
+  errorMessage: string = '';
 
   constructor(
-    private afAuth: AngularFireAuth,
+    public authService: AuthService,
     private router: Router,
-    private ngZone: NgZone
-  ) { }
-
-  ngOnInit() {
-    const uiConfig = {
-      signInOptions: [
-        // Leave the lines as is for the providers you want to offer your users.
-        firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-        firebase.auth.EmailAuthProvider.PROVIDER_ID
-      ],
-      callbacks: {
-        signInSuccessWithAuthResult: this
-          .onLoginSuccessful
-          .bind(this)
-      },
-    };
-
-    // Initialize the FirebaseUI Widget using Firebase.
-    this.ui = new firebaseui.auth.AuthUI(firebase.auth());
-    // The start method will wait until the DOM is loaded.
-    this.ui.start('#firebase-auth-container', uiConfig);
+    private fb: FormBuilder
+  ) {
+    this.createForm();
   }
 
-  ngOnDestroy(): void {
-    this.ui.delete();
+  createForm() {
+    this.loginForm = this.fb.group({
+      email: ['', Validators.required ],
+      password: ['',Validators.required]
+    });
   }
 
-  onLoginSuccessful() {
-    this.ngZone.run(() => this.router.navigateByUrl('/'));
+  tryFacebookLogin(){
+    this.authService.doFacebookLogin()
+    .then(res => {
+      this.router.navigate(['/dashboard']);
+    })
+  }
+
+  tryTwitterLogin(){
+    this.authService.doTwitterLogin()
+    .then(res => {
+      this.router.navigate(['/dashboard']);
+    })
+  }
+
+  tryGoogleLogin(){
+    this.authService.doGoogleLogin()
+    .then(res => {
+      this.router.navigate(['/dashboard']);
+    })
+  }
+
+  tryLogin(value){
+    this.authService.doLogin(value)
+    .then(res => {
+      this.router.navigate(['/dashboard']);
+    }, err => {
+      console.log(err);
+      this.errorMessage = err.message;
+    })
   }
 }

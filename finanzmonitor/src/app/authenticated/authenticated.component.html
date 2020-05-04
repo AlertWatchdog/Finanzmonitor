@@ -1,7 +1,7 @@
 <mat-sidenav-container id="navcont" class="sidenav-container">
   <mat-sidenav #drawer class="sidenav" fixedInViewport [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
     [mode]="(isHandset$ | async) ? 'over' : 'side'" [opened]="(isHandset$ | async) === false">
-    <mat-toolbar>Menu</mat-toolbar>
+    <mat-toolbar>Menü</mat-toolbar>
     <mat-nav-list>
       <a mat-list-item href="dashboard">Dashboard</a>
       <a mat-list-item href="#">Link 2</a>
@@ -36,29 +36,45 @@
     <div class="modal-body" id="modal-body">
 
         <mat-form-field>
-            <mat-select placeholder="Art">
+            <mat-select placeholder="Art" [errorStateMatcher]="matcher" [formControl]="typeFormControl">
               <mat-option value="option">Einnahme</mat-option>
               <mat-option value="option">Ausgabe</mat-option>
             </mat-select>
+            <mat-error *ngIf="typeFormControl.hasError('required')">
+              Art wird benötigt
+            </mat-error>
           </mat-form-field>
       
       <mat-form-field>
-        <input matInput placeholder="Betrag" type="text">
+        <input matInput placeholder="Betrag" type="text" [errorStateMatcher]="matcher" [formControl]="amountFormControl">
+        <mat-error *ngIf="amountFormControl.hasError('required')">
+          Betrag wird benötigt
+        </mat-error>
       </mat-form-field>
 
       <mat-form-field>
           <mat-label>Kategorie</mat-label>
-          <mat-select [formControl]="categoryControl">
-              <mat-option>-- None --</mat-option>
-              <mat-optgroup *ngFor="let group of categoryGroups" [label]="group.name"
-                            [disabled]="group.disabled">
-                <mat-option *ngFor="let category of group.category" [value]="category.name">
-                  {{category.name}}
-                </mat-option>
-              </mat-optgroup>
+          <mat-select [formControl]="categoryControl" [(value)]="selectedCategory" [errorStateMatcher]="matcher" [formControl]="categoryFormControl">
+              <mat-option value="none">Keine Kategorie</mat-option>
+              <mat-option value="new" ng-model="selected">Neue Kategorie</mat-option>
             </mat-select>
+            <mat-error *ngIf="categoryFormControl.hasError('required')">
+              Kategorie wird benötigt
+            </mat-error>
+      </mat-form-field>
+      <mat-form-field *ngIf="selectedCategory == 'new'" id="newCategory">
+        <input matInput placeholder="Neue Kategorie" type="text" [errorStateMatcher]="matcher" [formControl]="newCatFormControl">
+        <mat-error *ngIf="newCatFormControl.hasError('required')">
+          Name der Kategorie darf nicht leer sein
+        </mat-error>
       </mat-form-field>
 
+      <mat-form-field>
+        <input matInput placeholder="Bezeichnung" type="text" [errorStateMatcher]="matcher" [formControl]="nameFormControl">
+        <mat-error *ngIf="typeFormControl.hasError('required')">
+          Bezeichnung wird benötigt
+        </mat-error>
+      </mat-form-field>
     </div>
     <hr>
     <div class="modal-footer" id="modal-footer">

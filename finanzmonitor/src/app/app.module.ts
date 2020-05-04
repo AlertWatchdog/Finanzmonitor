@@ -26,6 +26,9 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AuthComponent } from './auth/auth.component';
 import { ProfileComponent } from './pages/profile/profile.component';
+import { AuthService } from './auth/auth.service';
+import { RegisterComponent } from './auth/register/register/register.component';
+import { Database } from 'src/database/database';
 
 
 @NgModule({
@@ -35,6 +38,7 @@ import { ProfileComponent } from './pages/profile/profile.component';
     DashboardComponent,
     AuthComponent,
     ProfileComponent,
+    RegisterComponent,
   ],
   imports: [
     BrowserModule,
@@ -57,7 +61,7 @@ import { ProfileComponent } from './pages/profile/profile.component';
     ReactiveFormsModule,
     MatTooltipModule
   ],
-  providers: [],
+  providers: [AuthService, Database],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

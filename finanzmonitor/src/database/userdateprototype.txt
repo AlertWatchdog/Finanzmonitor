@@ -1,0 +1,24 @@
+{
+            author: uid,
+            years: [
+                {
+                    year: year,
+                    months: [
+                        {
+                            month: month,
+                            expenses: [],
+                            incomes: [],
+                            expenseTotal: 0,
+                            incomeTotal: 0,
+                        }
+                    ],
+                    expenseTotal: 0,
+                    incomeTotal: 0
+                }
+            ],
+            expenseTotal: 0,
+            incomeTotal: 0,
+            runningMonthlyExpenses: [],
+            categories: [],
+
+        }
