@@ -37,8 +37,8 @@
 
         <mat-form-field>
             <mat-select placeholder="Art" [errorStateMatcher]="matcher" [formControl]="typeFormControl">
-              <mat-option value="option">Einnahme</mat-option>
-              <mat-option value="option">Ausgabe</mat-option>
+              <mat-option value="income">Einnahme</mat-option>
+              <mat-option value="expense">Ausgabe</mat-option>
             </mat-select>
             <mat-error *ngIf="typeFormControl.hasError('required')">
               Art wird benötigt
@@ -78,7 +78,7 @@
     </div>
     <hr>
     <div class="modal-footer" id="modal-footer">
-      <button mat-raised-button color="primary">Speichern</button>
+      <button mat-raised-button color="primary" (click)="saveNewCashflows()">Speichern</button>
     </div>
   </div>
 </div>

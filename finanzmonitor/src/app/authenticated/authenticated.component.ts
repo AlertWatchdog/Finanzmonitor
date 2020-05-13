@@ -33,9 +33,13 @@ export class AuthenticatedComponent implements OnInit {
     this.loadUserData();
   }
 
-  loadUserData(){
+  async loadUserData(){  
     this.user = this.appComponent.getCurrentUser();
-    this.data = this.database.getUserdata(this.user.uid);
+    this.data = await this.database.getUserdata(this.user.uid);
+  }
+
+  async refreshData(){
+    this.data = await this.database.getUserdata(this.user.uid);
   }
 
   openModal(){
@@ -78,7 +82,51 @@ export class AuthenticatedComponent implements OnInit {
     }
   }
 
-  saveNewExpense(){
-
+  saveNewCashflows(){
+    let date = new Date();
+    let year = date.getFullYear();
+    let month = date.getMonth();
+    let category;
+    let update = {years:{}};
+    if(this.categoryControl.value == "new"){
+      category = this.newCatFormControl.value;
+      update["categories"] = [category];
+    } else {
+      category = this.categoryControl.value;
+    }
+    let cashFlow = {
+      amount: <number> this.amountFormControl.value,
+      category: category,
+      description: this.nameFormControl.value,
+      entryDate: date.toUTCString()
+    }
+    let amount = Number(cashFlow.amount)
+    if(this.typeFormControl.value === "income"){
+      update["incomeTotal"] = Number(this.data.data.incomeTotal) + amount //Zahlen werden als Strings addiert?!
+      update.years[year] = {
+        months: {
+        },
+        incomeTotal: Number(this.data.data.years[year].incomeTotal) + amount
+      };
+      update.years[year].months[month] = {
+        incomes: [cashFlow],
+        incomeTotal: Number(this.data.data.years[year].months[month].incomeTotal) + amount
+      };
+    } else {
+      update["expenseTotal"] = Number(this.data.data.expenseTotal) + amount
+      update.years[year] = {
+        months: {
+        },
+        expenseTotal: Number(this.data.data.years[year].expenseTotal) + amount
+      };
+      update.years[year].months[month] = {
+        expenses: [cashFlow],
+        expenseTotal: Number(this.data.data.years[year].months[month].expenseTotal) + amount
+      };
+    }
+    this.database.addCashFlow(this.data.id, update);
+    this.closeModal();
+    this.refreshData();
+    
   }
 }
