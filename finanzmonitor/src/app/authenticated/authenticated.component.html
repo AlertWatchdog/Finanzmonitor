@@ -4,8 +4,6 @@
     <mat-toolbar>Menü</mat-toolbar>
     <mat-nav-list>
       <a mat-list-item href="dashboard">Dashboard</a>
-      <a mat-list-item href="#">Link 2</a>
-      <a mat-list-item href="#">Link 3</a>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
@@ -34,7 +32,8 @@
     </div>
     <hr>
     <div class="modal-body" id="modal-body">
-
+      
+      
         <mat-form-field>
             <mat-select placeholder="Art" [errorStateMatcher]="matcher" [formControl]="typeFormControl">
               <mat-option value="income">Einnahme</mat-option>
@@ -75,6 +74,7 @@
           Bezeichnung wird benötigt
         </mat-error>
       </mat-form-field>
+        <mat-checkbox [formControl]="monthlyFormControl">Monatlicher Geldfluss</mat-checkbox>
     </div>
     <hr>
     <div class="modal-footer" id="modal-footer">

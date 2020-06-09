@@ -3,6 +3,8 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { FormControl, Validators } from '@angular/forms';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatDatepickerModule} from '@angular/material/datepicker'; 
 import {AppComponent} from 'src/app/app.component';
 import { ErrorStateMatcher } from '@angular/material';
 import { Database } from '../../database/database';
@@ -71,6 +73,9 @@ export class AuthenticatedComponent implements OnInit {
     Validators.pattern("[0-9]*([\.\,][0-9]{1,2})?"),
     this.amountZero
   ]);
+  monthlyFormControl = new FormControl('', [
+    Validators.required,
+  ]);
 
   amountZero(control: FormControl){
     let value = control.value.replace(',', '.');
@@ -88,19 +93,30 @@ export class AuthenticatedComponent implements OnInit {
     let month = date.getMonth();
     let category;
     let update = {years:{}};
+    
     if(this.categoryControl.value == "new"){
       category = this.newCatFormControl.value;
       update["categories"] = [category];
     } else {
       category = this.categoryControl.value;
     }
+
     let cashFlow = {
       amount: <number> this.amountFormControl.value,
       category: category,
       description: this.nameFormControl.value,
       entryDate: date.toUTCString()
     }
-    let amount = Number(cashFlow.amount)
+
+    if(this.monthlyFormControl.value){
+      if(!update.hasOwnProperty("runningMonthlyExpenses")){
+        update["runningMonthlyExpenses"] = [];
+      }
+      update["runningMonthlyExpenses"].push(cashFlow);      
+    }
+
+    let amount = Number(cashFlow.amount);
+
     if(this.typeFormControl.value === "income"){
       update["incomeTotal"] = Number(this.data.data.incomeTotal) + amount //Zahlen werden als Strings addiert?!
       update.years[year] = {

@@ -66,7 +66,7 @@ export class Database {
             update["expenseTotal"] = data.expenseTotal;
         }
         if(data.hasOwnProperty('runningMonthlyExpenses')){
-            update["runningMonthlyExpenses"] = firestore.FieldValue.arrayUnion(data.runningMonthlyExpenses);
+            update["runningMonthlyExpenses"] = firestore.FieldValue.arrayUnion(...data.runningMonthlyExpenses);
         }
         if(data.hasOwnProperty('categories')){
             update["categories"] = firestore.FieldValue.arrayUnion(...data.categories);

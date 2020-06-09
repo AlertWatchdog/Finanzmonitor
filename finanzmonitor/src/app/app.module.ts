@@ -19,6 +19,8 @@ import {MatSelectModule} from '@angular/material/select';
 import {ReactiveFormsModule} from '@angular/forms'
 import { ChartsModule } from 'ng2-charts';
 import {MatTooltipModule} from '@angular/material/tooltip'; 
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatDatepickerModule} from '@angular/material/datepicker'; 
 
 import { AngularFireModule } from '@angular/fire';
 import { environment } from '../environments/environment';
@@ -59,7 +61,9 @@ import { Database } from 'src/database/database';
     MatSelectModule,
     MatInputModule,
     ReactiveFormsModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatCheckboxModule,
+    MatDatepickerModule
   ],
   providers: [AuthService, Database],
   bootstrap: [AppComponent]
