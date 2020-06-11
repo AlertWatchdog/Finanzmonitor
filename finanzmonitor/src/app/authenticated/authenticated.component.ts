@@ -19,6 +19,7 @@ export class AuthenticatedComponent implements OnInit {
   selectedCategory = 'none';
   user;
   data;
+  categories;
 
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
     .pipe(
@@ -38,6 +39,7 @@ export class AuthenticatedComponent implements OnInit {
   async loadUserData(){  
     this.user = this.appComponent.getCurrentUser();
     this.data = await this.database.getUserdata(this.user.uid);
+    this.categories = this.data.data.categories;
   }
 
   async refreshData(){
@@ -87,12 +89,33 @@ export class AuthenticatedComponent implements OnInit {
     }
   }
 
+  checkDatesAvailable(year, month){
+    if(!this.data.data.years.hasOwnProperty(year)){
+      this.data.data.years[year] = {
+        months: {
+        },
+        expenseTotal: 0,
+        incomeTotal: 0
+      };
+    }
+    if(!this.data.data.years[year].months.hasOwnProperty(month)){
+      this.data.data.years[year].months[month] = {
+        expenses: [],
+        incomes: [],
+        expenseTotal: 0,
+        incomeTotal: 0
+      };
+    }
+  }
+
   saveNewCashflows(){
     let date = new Date();
     let year = date.getFullYear();
     let month = date.getMonth();
     let category;
     let update = {years:{}};
+
+    this.checkDatesAvailable(year, month);
     
     if(this.categoryControl.value == "new"){
       category = this.newCatFormControl.value;
@@ -118,7 +141,7 @@ export class AuthenticatedComponent implements OnInit {
     let amount = Number(cashFlow.amount);
 
     if(this.typeFormControl.value === "income"){
-      update["incomeTotal"] = Number(this.data.data.incomeTotal) + amount //Zahlen werden als Strings addiert?!
+      update["incomeTotal"] = Number(this.data.data.incomeTotal) + amount
       update.years[year] = {
         months: {
         },

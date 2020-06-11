@@ -84,16 +84,16 @@ export class Database {
                 let month = k;
                 let x: any = v as any;
                 if(x.hasOwnProperty('incomeTotal')){
-                    update["years."+year+"."+month+".incomeTotal"] = x.incomeTotal;
+                    update["years."+year+".months."+month+".incomeTotal"] = x.incomeTotal;
                 }
                 if(x.hasOwnProperty('expenseTotal')){
-                    update["years."+year+"."+month+".expenseTotal"] = x.expenseTotal;
+                    update["years."+year+".months."+month+".expenseTotal"] = x.expenseTotal;
                 }
                 if(x.hasOwnProperty('expenses')){
-                    update["years."+year+"."+month+".expenses"] = firestore.FieldValue.arrayUnion(...x.expenses); // Array wird in einzelne elemente aufgespaltet und übertragen. Array union akzeptiert keine arrays
+                    update["years."+year+".months."+month+".expenses"] = firestore.FieldValue.arrayUnion(...x.expenses); // Array wird in einzelne elemente aufgespalten und übertragen. Array union akzeptiert keine arrays
                 }
                 if(x.hasOwnProperty('incomes')){
-                    update["years."+year+"."+month+".incomes"] = firestore.FieldValue.arrayUnion(...x.incomes);
+                    update["years."+year+".months."+month+".incomes"] = firestore.FieldValue.arrayUnion(...x.incomes);
                 }
             };
         };

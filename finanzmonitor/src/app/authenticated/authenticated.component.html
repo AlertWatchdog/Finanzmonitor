@@ -56,6 +56,7 @@
           <mat-select [formControl]="categoryControl" [(value)]="selectedCategory" [errorStateMatcher]="matcher" [formControl]="categoryFormControl">
               <mat-option value="none">Keine Kategorie</mat-option>
               <mat-option value="new" ng-model="selected">Neue Kategorie</mat-option>
+              <mat-option *ngFor="let category of categories" [value]="category">{{category}}</mat-option>
             </mat-select>
             <mat-error *ngIf="categoryFormControl.hasError('required')">
               Kategorie wird benötigt
