@@ -2,8 +2,9 @@ import { Component } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { auth } from 'firebase/app';
+import { auth, database } from 'firebase/app';
 import { AuthService } from './auth/auth.service';
+import { Database } from 'src/database/database';
 
 @Component({
   selector: 'app-root',
@@ -18,6 +19,7 @@ export class AppComponent {
   constructor(db: AngularFirestore,public afAuth: AngularFireAuth, public authService: AuthService) {
     this.items = db.collection('User').valueChanges();
     this.db = db;
+    this.getCurrentUser();
   }  
   login() {
     this.afAuth.auth.signInWithPopup(new auth.GoogleAuthProvider());

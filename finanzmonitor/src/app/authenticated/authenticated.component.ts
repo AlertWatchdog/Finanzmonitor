@@ -17,9 +17,10 @@ import { Database } from '../../database/database';
 export class AuthenticatedComponent implements OnInit {
 
   selectedCategory = 'none';
-  user;
-  data;
+  
+  monthlyBalance;
   categories;
+  user;
 
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
     .pipe(
@@ -38,12 +39,10 @@ export class AuthenticatedComponent implements OnInit {
 
   async loadUserData(){  
     this.user = this.appComponent.getCurrentUser();
-    this.data = await this.database.getUserdata(this.user.uid);
-    this.categories = this.data.data.categories;
-  }
-
-  async refreshData(){
-    this.data = await this.database.getUserdata(this.user.uid);
+    await this.database.loadUserData(this.user);
+    let tmp = await this.database.getAuthenticatedData();
+    this.monthlyBalance = tmp.monthlyBalance;
+    this.categories = tmp.categories;
   }
 
   openModal(){
@@ -89,33 +88,13 @@ export class AuthenticatedComponent implements OnInit {
     }
   }
 
-  checkDatesAvailable(year, month){
-    if(!this.data.data.years.hasOwnProperty(year)){
-      this.data.data.years[year] = {
-        months: {
-        },
-        expenseTotal: 0,
-        incomeTotal: 0
-      };
-    }
-    if(!this.data.data.years[year].months.hasOwnProperty(month)){
-      this.data.data.years[year].months[month] = {
-        expenses: [],
-        incomes: [],
-        expenseTotal: 0,
-        incomeTotal: 0
-      };
-    }
-  }
-
   saveNewCashflows(){
     let date = new Date();
     let year = date.getFullYear();
     let month = date.getMonth();
     let category;
     let update = {years:{}};
-
-    this.checkDatesAvailable(year, month);
+    let data = this.database.getUserData(year, month);
     
     if(this.categoryControl.value == "new"){
       category = this.newCatFormControl.value;
@@ -141,31 +120,30 @@ export class AuthenticatedComponent implements OnInit {
     let amount = Number(cashFlow.amount);
 
     if(this.typeFormControl.value === "income"){
-      update["incomeTotal"] = Number(this.data.data.incomeTotal) + amount
+      update["incomeTotal"] = Number(data.incomeTotal) + amount
       update.years[year] = {
         months: {
         },
-        incomeTotal: Number(this.data.data.years[year].incomeTotal) + amount
+        incomeTotal: Number(data.years[year].incomeTotal) + amount
       };
       update.years[year].months[month] = {
         incomes: [cashFlow],
-        incomeTotal: Number(this.data.data.years[year].months[month].incomeTotal) + amount
+        incomeTotal: Number(data.years[year].months[month].incomeTotal) + amount
       };
     } else {
-      update["expenseTotal"] = Number(this.data.data.expenseTotal) + amount
+      update["expenseTotal"] = Number(data.expenseTotal) + amount
       update.years[year] = {
         months: {
         },
-        expenseTotal: Number(this.data.data.years[year].expenseTotal) + amount
+        expenseTotal: Number(data.years[year].expenseTotal) + amount
       };
       update.years[year].months[month] = {
         expenses: [cashFlow],
-        expenseTotal: Number(this.data.data.years[year].months[month].expenseTotal) + amount
+        expenseTotal: Number(data.years[year].months[month].expenseTotal) + amount
       };
     }
-    this.database.addCashFlow(this.data.id, update);
+    this.database.addCashFlow(data.id, update);
     this.closeModal();
-    this.refreshData();
-    
+    this.loadUserData();
   }
 }

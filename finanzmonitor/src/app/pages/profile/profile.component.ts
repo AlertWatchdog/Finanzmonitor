@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthenticatedComponent } from 'src/app/authenticated/authenticated.component';
+import { Database } from 'src/database/database';
 
 @Component({
   selector: 'app-profile',
@@ -8,10 +9,10 @@ import { AuthenticatedComponent } from 'src/app/authenticated/authenticated.comp
 })
 export class ProfileComponent implements OnInit {
 
-  constructor(private authComponent: AuthenticatedComponent) { }
+  constructor(private db: Database) { }
 
   ngOnInit() {
   }
 
-  user = this.authComponent.user;
+  user = this.db.user;
 }
