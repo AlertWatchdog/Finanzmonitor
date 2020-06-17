@@ -1,8 +1,8 @@
 <div class="card-wrapper">
     <mat-card id="card-expenses">
         <mat-card-content>
-            <div class="chart-wrapper">
-                <canvas baseChart [datasets]="barChartData" [labels]="barChartLabels" [options]="barChartOptions"
+            <div class="chart-wrapper" *ngIf="monthlyOverviewData">
+                <canvas baseChart [datasets]="monthlyOverviewData" [labels]="monthlyOverviewLabels" [options]="barChartOptions"
                     [plugins]="barChartPlugins" [legend]="barChartLegend" [chartType]="barChartType">
                 </canvas>
             </div>

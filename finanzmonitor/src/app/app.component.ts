@@ -19,7 +19,6 @@ export class AppComponent {
   constructor(db: AngularFirestore,public afAuth: AngularFireAuth, public authService: AuthService) {
     this.items = db.collection('User').valueChanges();
     this.db = db;
-    this.getCurrentUser();
   }  
   login() {
     this.afAuth.auth.signInWithPopup(new auth.GoogleAuthProvider());

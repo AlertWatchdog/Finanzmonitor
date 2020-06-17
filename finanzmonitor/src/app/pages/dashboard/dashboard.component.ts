@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ChartOptions, ChartType, ChartDataSets } from 'chart.js';
 import { Label } from 'ng2-charts';
 import { NONE_TYPE } from '@angular/compiler/src/output/output_ast';
+import { Database } from 'src/database/database';
 
 @Component({
   selector: 'app-dashboard',
@@ -10,11 +11,41 @@ import { NONE_TYPE } from '@angular/compiler/src/output/output_ast';
 })
 export class DashboardComponent implements OnInit {
 
-  data = [45, -37, 60, -70, 46, 33];
-  constructor() { }
+  
+  yearlyOverviewData;
+  yearlyOverviewLabels;
+
+  monthlyOverviewDataset = [0];
+  monthlyOverviewData = [ {data: this.monthlyOverviewDataset, backgroundColor: ['blue'] } ];
+  monthlyOverviewLabels: Label[] = ['0'];
+
+  constructor(private db: Database) { }
 
   ngOnInit(){
+    let date = new Date();
+    let year = date.getFullYear();
+    let month = date.getMonth();
+    this.createMonthlyCatOverview( this.getDataByMonth(year, month), year, month);
   }
+
+  getDataByMonth(year, month){
+    return this.db.getUserData(year, month);
+  }
+
+  createMonthlyCatOverview(data, year, month){
+    console.log(data);
+    this.monthlyOverviewLabels = data.categories;
+    for(let i = 0; i < this.monthlyOverviewLabels.length; i++){
+      this.monthlyOverviewDataset[i] = 0;
+    }
+    let expenses = data.years[year].months[month].expenses;
+    for(let x of expenses){
+      this.monthlyOverviewDataset[this.monthlyOverviewLabels.indexOf(x.category)] += Number(x.amount);
+    } 
+    this.monthlyOverviewData = null;
+    this.monthlyOverviewData = [ {data: this.monthlyOverviewDataset, backgroundColor: ['blue'] } ];
+  }
+
   barChartOptions: ChartOptions = {
     responsive: true,
   };
@@ -36,7 +67,4 @@ export class DashboardComponent implements OnInit {
     return colors;
   }
 
-  barChartData: ChartDataSets[] = [
-    { data: this.data, backgroundColor: this.setNegativeColor(this.data),  }
-  ];
 }

@@ -39,7 +39,7 @@ export class AuthenticatedComponent implements OnInit {
 
   async loadUserData(){  
     this.user = this.appComponent.getCurrentUser();
-    await this.database.loadUserData(this.user);
+    await this.database.loadUserData(this.user.id);
     let tmp = await this.database.getAuthenticatedData();
     this.monthlyBalance = tmp.monthlyBalance;
     this.categories = tmp.categories;
@@ -88,13 +88,13 @@ export class AuthenticatedComponent implements OnInit {
     }
   }
 
-  saveNewCashflows(){
+  async saveNewCashflows(){
     let date = new Date();
     let year = date.getFullYear();
     let month = date.getMonth();
     let category;
     let update = {years:{}};
-    let data = this.database.getUserData(year, month);
+    let data = await this.database.getUserData(year, month);
     
     if(this.categoryControl.value == "new"){
       category = this.newCatFormControl.value;
