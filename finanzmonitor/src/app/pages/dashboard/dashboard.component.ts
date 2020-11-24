@@ -3,6 +3,7 @@ import { ChartOptions, ChartType, ChartDataSets } from 'chart.js';
 import { Label } from 'ng2-charts';
 import { NONE_TYPE } from '@angular/compiler/src/output/output_ast';
 import { Database } from 'src/database/database';
+import { database } from 'firebase';
 
 @Component({
   selector: 'app-dashboard',
@@ -15,9 +16,9 @@ export class DashboardComponent implements OnInit {
   yearlyOverviewData;
   yearlyOverviewLabels;
 
-  monthlyOverviewDataset = [0];
+  monthlyOverviewDataset = [-10, 20];
   monthlyOverviewData = [ {data: this.monthlyOverviewDataset, backgroundColor: ['blue'] } ];
-  monthlyOverviewLabels: Label[] = ['0'];
+  monthlyOverviewLabels: Label[] = ['0', '1'];
 
   constructor(private db: Database) { }
 
@@ -25,7 +26,7 @@ export class DashboardComponent implements OnInit {
     let date = new Date();
     let year = date.getFullYear();
     let month = date.getMonth();
-    this.createMonthlyCatOverview( this.getDataByMonth(year, month), year, month);
+    //this.createMonthlyCatOverview( this.getDataByMonth(year, month), year, month);
   }
 
   getDataByMonth(year, month){

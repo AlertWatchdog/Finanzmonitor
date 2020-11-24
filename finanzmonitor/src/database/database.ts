@@ -9,7 +9,7 @@ export class Database {
     data;
 
     async loadUserData(user){  
-        this. user = user;
+        this.user = user;
         this.data = await this.getUserdata(user.uid);        
     }
 

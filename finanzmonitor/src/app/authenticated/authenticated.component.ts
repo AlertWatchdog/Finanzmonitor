@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
+import * as firebase from 'firebase';
 import { map, shareReplay } from 'rxjs/operators';
 import { FormControl, Validators } from '@angular/forms';
 import {MatCheckboxModule} from '@angular/material/checkbox';
@@ -34,12 +35,18 @@ export class AuthenticatedComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.loadUserData();
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        // User is signed in, see docs for a list of available properties
+        // https://firebase.google.com/docs/reference/js/firebase.User
+        this.user = user;
+        this.loadUserData();
+      }
+    });
   }
 
-  async loadUserData(){  
-    this.user = this.appComponent.getCurrentUser();
-    await this.database.loadUserData(this.user.id);
+  async loadUserData(){
+    await this.database.loadUserData(this.user);
     let tmp = await this.database.getAuthenticatedData();
     this.monthlyBalance = tmp.monthlyBalance;
     this.categories = tmp.categories;
