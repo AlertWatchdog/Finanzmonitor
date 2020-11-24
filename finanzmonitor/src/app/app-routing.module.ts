@@ -11,7 +11,7 @@ const routes: Routes = [
   {path:'', component: AuthenticatedComponent, children: [
     {path:'dashboard', component: DashboardComponent},
     {path:'', redirectTo:'dashboard', pathMatch: 'full'},
-    {path:'profile', component: ProfileComponent},
+    {path:'profile', component: ProfileComponent}
   ]}
 ];
 
