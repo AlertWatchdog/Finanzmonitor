@@ -2,6 +2,10 @@
 # Created by https://www.gitignore.io/api/node,angular,firebase
 # Edit at https://www.gitignore.io/?templates=node,angular,firebase
 
+#firebase Data#
+environment.prod.ts
+environment.ts
+
 ### Angular ###
 ## Angular ##
 # compiled output
