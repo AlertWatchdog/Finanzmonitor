@@ -21,6 +21,7 @@ import { ChartsModule } from 'ng2-charts';
 import {MatTooltipModule} from '@angular/material/tooltip'; 
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatDatepickerModule} from '@angular/material/datepicker'; 
+import {NgxChartsModule} from '@swimlane/ngx-charts';
 
 import { AngularFireModule } from '@angular/fire';
 import { environment } from '../environments/environment';
@@ -63,9 +64,10 @@ import { Database } from 'src/database/database';
     ReactiveFormsModule,
     MatTooltipModule,
     MatCheckboxModule,
-    MatDatepickerModule
+    MatDatepickerModule,
+    NgxChartsModule,
   ],
-  providers: [AuthService, Database],
+  providers: [AuthService, Database, DashboardComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

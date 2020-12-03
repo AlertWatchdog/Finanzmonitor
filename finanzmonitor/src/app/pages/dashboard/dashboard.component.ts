@@ -1,65 +1,58 @@
-import { Component, OnInit } from '@angular/core';
-import { ChartOptions, ChartType, ChartDataSets } from 'chart.js';
-import { Label } from 'ng2-charts';
-import { NONE_TYPE } from '@angular/compiler/src/output/output_ast';
+import { Component } from '@angular/core';
 import { Database } from 'src/database/database';
-import { database } from 'firebase';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent {
+  saleData;
 
-  
   yearlyOverviewData;
   yearlyOverviewLabels;
 
-  monthlyOverviewDataset = [-10, 20];
-  monthlyOverviewData = [ {data: this.monthlyOverviewDataset, backgroundColor: ['blue'] } ];
-  monthlyOverviewLabels: Label[] = ['0', '1'];
-
-  constructor(private db: Database) { }
-
-  ngOnInit(){
+  ngOnInit() {
     let date = new Date();
     let year = date.getFullYear();
     let month = date.getMonth();
-    //this.createMonthlyCatOverview( this.getDataByMonth(year, month), year, month);
+    this.createMonthlyCatOverview(this.getDataByMonth(year, month), year, month);
   }
 
-  getDataByMonth(year, month){
+  monthlyOverviewDataset = [];
+  monthlyOverviewData;
+  monthlyOverviewLabels;
+  barChartType = "bar";
+
+  constructor(private db: Database) { }
+
+  getDataByMonth(year, month) {
     return this.db.getUserData(year, month);
   }
 
-  createMonthlyCatOverview(data, year, month){
-    console.log(data);
+  createMonthlyCatOverview(data, year, month) {
     this.monthlyOverviewLabels = data.categories;
-    for(let i = 0; i < this.monthlyOverviewLabels.length; i++){
-      this.monthlyOverviewDataset[i] = 0;
+    for (let i = 0; i < this.monthlyOverviewLabels.length; i++) {
+      this.monthlyOverviewDataset.push(0);
     }
     let expenses = data.years[year].months[month].expenses;
-    for(let x of expenses){
+    for (let x of expenses) {
       this.monthlyOverviewDataset[this.monthlyOverviewLabels.indexOf(x.category)] += Number(x.amount);
-    } 
-    this.monthlyOverviewData = null;
-    this.monthlyOverviewData = [ {data: this.monthlyOverviewDataset, backgroundColor: ['blue'] } ];
+    }
+    let tmp = [];
+    for (let i = 0; i < this.monthlyOverviewDataset.length; i++) {
+      if (this.monthlyOverviewDataset[i] > 0) {
+        tmp.push({ name: this.monthlyOverviewLabels[i], value: this.monthlyOverviewDataset[i] })
+      }
+    }
+    this.saleData = Object.assign([], tmp);
   }
 
-  barChartOptions: ChartOptions = {
-    responsive: true,
-  };
-  barChartLabels: Label[] = ['Apple', 'Banana', 'Kiwifruit', 'Blueberry', 'Orange', 'Grapes'];
-  barChartType: ChartType = 'bar';
-  barChartLegend = false;
-  barChartPlugins = [];
-  
 
-  setNegativeColor(data){
+  setNegativeColor(data) {
     let colors = [];
-    for(let i = 0; i < data.length; i++){
-      if(data[i] < 0){
+    for (let i = 0; i < data.length; i++) {
+      if (data[i] < 0) {
         colors.push('red');
       } else {
         colors.push('green');

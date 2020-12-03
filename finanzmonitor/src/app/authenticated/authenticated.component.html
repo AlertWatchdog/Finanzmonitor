@@ -19,7 +19,7 @@
         <a class="material-icons quicklink" matTooltip="Benutzerprofil" routerLink="/profile" routerLinkActive="active">person</a>
       </div>
     </mat-toolbar>
-    <router-outlet></router-outlet>
+    <router-outlet *ngIf="dataReady"></router-outlet>
   </mat-sidenav-content>
 </mat-sidenav-container>
 

@@ -4,11 +4,10 @@ import { Observable } from 'rxjs';
 import * as firebase from 'firebase';
 import { map, shareReplay } from 'rxjs/operators';
 import { FormControl, Validators } from '@angular/forms';
-import {MatCheckboxModule} from '@angular/material/checkbox';
-import {MatDatepickerModule} from '@angular/material/datepicker'; 
 import {AppComponent} from 'src/app/app.component';
 import { ErrorStateMatcher } from '@angular/material';
 import { Database } from '../../database/database';
+import { DashboardComponent } from '../pages/dashboard/dashboard.component';
 
 @Component({
   selector: 'app-authenticated',
@@ -16,7 +15,6 @@ import { Database } from '../../database/database';
   styleUrls: ['./authenticated.component.scss']
 })
 export class AuthenticatedComponent implements OnInit {
-
   selectedCategory = 'none';
   
   monthlyBalance;
@@ -31,9 +29,9 @@ export class AuthenticatedComponent implements OnInit {
   
     categoryControl = new FormControl();
 
-  constructor(private breakpointObserver: BreakpointObserver, private appComponent: AppComponent, private database: Database) {    
+  constructor(private breakpointObserver: BreakpointObserver, private appComponent: AppComponent, private database: Database, private dashboard: DashboardComponent) {    
   }
-
+  dataReady: boolean = false;
   ngOnInit() {
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
@@ -50,6 +48,7 @@ export class AuthenticatedComponent implements OnInit {
     let tmp = await this.database.getAuthenticatedData();
     this.monthlyBalance = tmp.monthlyBalance;
     this.categories = tmp.categories;
+    this.dataReady = true; //ensures Data is ready, before loading dashboard
   }
 
   openModal(){
