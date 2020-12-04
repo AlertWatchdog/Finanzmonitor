@@ -1,13 +1,28 @@
 <div class="card-wrapper">
+    <mat-card id="monthly-balance" class="balance-card">
+        <mat-card-header>Balance laufender Monat</mat-card-header>
+        <mat-card-content>
+            <h1>30€</h1>
+        </mat-card-content>
+    </mat-card>
+    <mat-card id="all-time-balance" class="balance-card">
+        <mat-card-header>Balance gesamt ohne ausgewiesene Rücklagen</mat-card-header>
+        <mat-card-content>
+            <h1>30€</h1>
+        </mat-card-content>
+    </mat-card>
+</div>
+<div class="chart-wrapper">
     <mat-card id="card-expenses">
+        <mat-card-header>
+            Ausgaben im aktuellen Monat
+        </mat-card-header>
         <mat-card-content>
             <div #containerChart id="test" class="chart-wrapper">
-                    <ngx-charts-bar-vertical [view]="[containerChart.offsetWidth, 400]" [results]="saleData"
-                        [xAxisLabel]="'Products'" [legendTitle]="'Product Sale Chart'" [yAxisLabel]="'Sale'"
-                        [legend]="true" [showXAxisLabel]="true" [showYAxisLabel]="true" [xAxis]="true" [yAxis]="true"
-                        [gradient]="true">
-                    </ngx-charts-bar-vertical>
-                </div>
+                <ngx-charts-advanced-pie-chart [view]="[containerChart.offsetWidth, 300]" [results]="saleData"
+                    [gradient]="false" [label]="'Gesamt'" [valueFormatting]="valueFormatter">
+                </ngx-charts-advanced-pie-chart>
+            </div>
         </mat-card-content>
     </mat-card>
 </div>

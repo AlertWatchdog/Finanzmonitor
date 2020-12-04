@@ -7,16 +7,21 @@ import { Database } from 'src/database/database';
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent {
+  data;
   saleData;
 
   yearlyOverviewData;
   yearlyOverviewLabels;
+  monthlyBalance: number;
+  allTimeBalance: number;
 
   ngOnInit() {
     let date = new Date();
     let year = date.getFullYear();
     let month = date.getMonth();
-    this.createMonthlyCatOverview(this.getDataByMonth(year, month), year, month);
+    this.data = this.getDataByMonth(year, month);
+    this.createMonthlyCatOverview(this.data, year, month);
+    this.setDashboardCardColors(this.data, year, month);
   }
 
   monthlyOverviewDataset = [];
@@ -28,6 +33,25 @@ export class DashboardComponent {
 
   getDataByMonth(year, month) {
     return this.db.getUserData(year, month);
+  }
+
+  valueFormatter(value){    
+    return value.toLocaleString() + '€';
+  }
+
+  setDashboardCardColors(data, year, month){
+    this.monthlyBalance = data.years[year].months[month].incomeTotal - data.years[year].months[month].expenseTotal - data.years[year].months[month].savingsTotal;
+    this.allTimeBalance = data.incomeTotal - data.expenseTotal - data.savingsTotal;
+    if(this.monthlyBalance < 0){
+      document.getElementById("monthly-balance").style.backgroundColor = "lightred";
+    } else {
+      document.getElementById("monthly-balance").style.backgroundColor = "lightgreen";
+    }
+    if(this.allTimeBalance < 0){
+      document.getElementById("all-time-balance").style.backgroundColor = "lightred";
+    } else {
+      document.getElementById("all-time-balance").style.backgroundColor = "lightgreen";
+    }
   }
 
   createMonthlyCatOverview(data, year, month) {
