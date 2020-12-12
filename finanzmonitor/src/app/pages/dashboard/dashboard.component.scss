@@ -7,12 +7,36 @@
   align-content: center;
   min-width:300px;
   width:49.8%;
+  height: 100%;
+}
+
+.hidden{
+  opacity: 0;
 }
 
 mat-card {
   display: inline-block;
   max-width: 100%;
   margin: 0.1%;
+}
+
+#cashSavingGoalInput {
+  display: none;
+}
+
+#cashSavingGoalInput > input{
+  width: 3em;
+}
+
+.save{
+  font-size: 18px !important;
+  color: lightblue;
+  cursor: pointer;
+}
+
+.save:hover{
+  font-size: 18px !important;
+  color: blue !important;
 }
 
 .chart-wrapper {
@@ -22,9 +46,25 @@ mat-card {
   width: 100%;
 }
 
+.chart-wrapper > mat-card {
+  width: 100%;
+}
+
+
 @media only screen and (min-width:601px) {
     .chart-wrapper{  
       max-width: 100%;
 
     }
+}
+
+.edit{
+  font-size: 18px !important;
+  color: darkgray;
+  cursor: pointer;
+}
+
+.edit:hover{
+  font-size: 18px !important;
+  color: black !important;
 }

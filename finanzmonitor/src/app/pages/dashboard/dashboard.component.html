@@ -2,13 +2,13 @@
     <mat-card id="monthly-balance" class="balance-card">
         <mat-card-header>Balance laufender Monat</mat-card-header>
         <mat-card-content>
-            <h1>30€</h1>
+            <h2>{{monthlyBalance}}€</h2>
         </mat-card-content>
     </mat-card>
     <mat-card id="all-time-balance" class="balance-card">
-        <mat-card-header>Balance gesamt ohne ausgewiesene Rücklagen</mat-card-header>
+        <mat-card-header>Verfügbares Geld</mat-card-header>
         <mat-card-content>
-            <h1>30€</h1>
+            <h2>{{allTimeBalance}}€</h2>
         </mat-card-content>
     </mat-card>
 </div>
@@ -18,17 +18,43 @@
             Ausgaben im aktuellen Monat
         </mat-card-header>
         <mat-card-content>
-            <div #containerChart id="test" class="chart-wrapper">
-                <ngx-charts-advanced-pie-chart [view]="[containerChart.offsetWidth, 300]" [results]="saleData"
+            <div id="test">
+                <ngx-charts-advanced-pie-chart (window:resize)="onResize($event)" [view]="view" [results]="expenseData"
                     [gradient]="false" [label]="'Gesamt'" [valueFormatting]="valueFormatter">
                 </ngx-charts-advanced-pie-chart>
             </div>
         </mat-card-content>
     </mat-card>
 </div>
-<mat-card id="card-balances">
-    <mat-card-content>
-        Content
-    </mat-card-content>
-    <mat-card-footer>Footer</mat-card-footer>
-</mat-card>
+<div class="card-wrapper">
+    <mat-card id="card-savings" class="balance-card">
+        <mat-card-header>Langfristige Rücklagen / Investitionen</mat-card-header>
+        <mat-card-content>
+            <h2>{{savings}}€</h2>
+            <i class="material-icons edit hidden" >create</i>
+        </mat-card-content>
+        <mat-card-footer> </mat-card-footer>
+    </mat-card>
+    <mat-card id="cash-savings" class="balance-card">
+        <mat-card-header>Bar-Rücklagen</mat-card-header>
+        <mat-card-content>
+            <h2>{{cashSavings}}€</h2>
+            <div id="cashSavingGoal">Ziel: {{cashSavingGoal}}€ <i class="material-icons edit" matTooltip="bearbeiten" (click)="editSavingsGoal()">create</i></div>
+            <div id="cashSavingGoalInput"> <input matInput placeholder="Ziel" id="textCashSavingGoal" value="{{cashSavingGoal}}" (keyup.enter)="saveSavingsGoal($event)" type="text"><i class="material-icons save" matTooltip="speichern" (click)="saveSavingsGoal($event)">save</i></div>
+        </mat-card-content>
+    </mat-card>
+</div>
+<div class="chart-wrapper">
+    <mat-card id="card-cash-savings">
+        <mat-card-header>
+            Ansparungen im aktuellen Monat
+        </mat-card-header>
+        <mat-card-content>
+            <div id="test" >
+                <ngx-charts-advanced-pie-chart (window:resize)="onResize($event)" [view]="view" [results]="savingsData"
+                    [gradient]="false" [label]="'Gesamt'" [valueFormatting]="valueFormatter">
+                </ngx-charts-advanced-pie-chart>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</div>

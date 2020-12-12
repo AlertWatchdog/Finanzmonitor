@@ -35,14 +35,16 @@
       
       
         <mat-form-field>
-            <mat-select placeholder="Art" [errorStateMatcher]="matcher" [formControl]="typeFormControl">
+            <mat-select placeholder="Art" [errorStateMatcher]="matcher" [(value)]="selectedType" [formControl]="typeFormControl">
               <mat-option value="income">Einnahme</mat-option>
               <mat-option value="expense">Ausgabe</mat-option>
+              <mat-option value="saving">Ansparung</mat-option>
             </mat-select>
             <mat-error *ngIf="typeFormControl.hasError('required')">
               Art wird benötigt
             </mat-error>
           </mat-form-field>
+          <mat-checkbox *ngIf="selectedType == 'saving'" [formControl]="cashSavingControl">Bar Ansparung</mat-checkbox>
       
       <mat-form-field>
         <input matInput placeholder="Betrag" type="text" [errorStateMatcher]="matcher" [formControl]="amountFormControl">

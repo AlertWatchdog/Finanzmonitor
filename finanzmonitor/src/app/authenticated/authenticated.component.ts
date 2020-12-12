@@ -83,6 +83,9 @@ export class AuthenticatedComponent implements OnInit {
   monthlyFormControl = new FormControl('', [
     Validators.required,
   ]);
+  cashSavingControl = new FormControl('', [
+    Validators.required,
+  ]);
 
   amountZero(control: FormControl){
     let value = control.value.replace(',', '.');
@@ -113,14 +116,8 @@ export class AuthenticatedComponent implements OnInit {
       amount: <number> this.amountFormControl.value,
       category: category,
       description: this.nameFormControl.value,
-      entryDate: date.toUTCString()
-    }
-
-    if(this.monthlyFormControl.value){
-      if(!update.hasOwnProperty("runningMonthlyExpenses")){
-        update["runningMonthlyExpenses"] = [];
-      }
-      update["runningMonthlyExpenses"].push(cashFlow);      
+      entryDate: date.toUTCString(),
+      type: this.typeFormControl.value
     }
 
     let amount = Number(cashFlow.amount);
@@ -136,7 +133,7 @@ export class AuthenticatedComponent implements OnInit {
         incomes: [cashFlow],
         incomeTotal: Number(data.years[year].months[month].incomeTotal) + amount
       };
-    } else {
+    } else if(this.typeFormControl.value === "expense"){
       update["expenseTotal"] = Number(data.expenseTotal) + amount
       update.years[year] = {
         months: {
@@ -147,9 +144,41 @@ export class AuthenticatedComponent implements OnInit {
         expenses: [cashFlow],
         expenseTotal: Number(data.years[year].months[month].expenseTotal) + amount
       };
+    } else if (!this.cashSavingControl.value){
+      update["savingsTotal"] = Number(data.savingsTotal) + amount
+      update.years[year] = {
+        months: {
+        },
+        savingsTotal: Number(data.years[year].savingsTotal) + amount
+      };
+      update.years[year].months[month] = {
+        savings: [cashFlow],
+        savingsTotal: Number(data.years[year].months[month].savingsTotal) + amount
+      };
+    } else {
+      cashFlow.type = "cashSaving";
+      update["cashSavingsTotal"] = Number(data.cashSavingsTotal) + amount
+      update.years[year] = {
+        months: {
+        },
+        cashSavingsTotal: Number(data.years[year].cashSavingsTotal) + amount
+      };
+      update.years[year].months[month] = {
+        cashSavings: [cashFlow],
+        cashSavingsTotal: Number(data.years[year].months[month].cashSavingsTotal) + amount
+      };
     }
+
+    if(this.monthlyFormControl.value){
+      if(!update.hasOwnProperty("runningMonthlyExpenses")){
+        update["runningMonthlyExpenses"] = [];
+      }
+      update["runningMonthlyExpenses"].push(cashFlow);      
+    }
+
     this.database.addCashFlow(data.id, update);
     this.closeModal();
+    this.dataReady = false;
     this.loadUserData();
   }
 }
