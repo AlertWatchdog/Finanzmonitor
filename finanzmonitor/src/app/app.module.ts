@@ -32,6 +32,7 @@ import { ProfileComponent } from './pages/profile/profile.component';
 import { AuthService } from './auth/auth.service';
 import { RegisterComponent } from './auth/register/register/register.component';
 import { Database } from 'src/database/database';
+import { ListviewComponent } from './pages/listview/listview.component';
 
 
 @NgModule({
@@ -42,6 +43,7 @@ import { Database } from 'src/database/database';
     AuthComponent,
     ProfileComponent,
     RegisterComponent,
+    ListviewComponent,
   ],
   imports: [
     BrowserModule,
